@@ -64,7 +64,8 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         '0510-bootsplash.patch'
         '0511-bootsplash.patch'
         '0512-bootsplash.patch'
-        '0513-bootsplash.gitpatch')
+        '0513-bootsplash.gitpatch'
+	'add-acs-overrides.patch')
 sha256sums=('e7f75186aa0642114af8f19d99559937300ca27acaf7451b36d4f9b0f85cf1f5'
             '5b558a40c2fdad2c497fe0b1a64679313fd5a7ccbaecef8803d49b3baaccbacd'
             'c7b90f2b5a3adff3ca13fe9178ead1ea571f16af6af4454974de6d0ccf52c802'
