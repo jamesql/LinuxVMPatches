@@ -1,2 +1,4 @@
 linux-5.8.tar.xz
 ./linux-5.8.tar.xz
+./src
+./pkg
