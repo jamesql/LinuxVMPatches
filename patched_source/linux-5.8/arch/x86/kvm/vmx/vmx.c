@@ -5,12 +5,15 @@
  * This module enables machines with Intel VT-x extensions to run virtual
  * machines without emulation or binary translation.
  *
+ * Modified by Big Man James 2021
+ *
  * Copyright (C) 2006 Qumranet, Inc.
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
  *
  * Authors:
  *   Avi Kivity   <avi@qumranet.com>
  *   Yaniv Kamay  <yaniv@qumranet.com>
+ *   Big Man James <haizywoop@gmail.com>
  */
 
 #include <linux/frame.h>
