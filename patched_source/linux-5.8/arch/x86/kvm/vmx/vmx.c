@@ -5665,6 +5665,19 @@ static int handle_encls(struct kvm_vcpu *vcpu)
 	return 1;
 }
 
+// dis ting i found on reddit
+
+static int handle_rdtsc(struct kvm_vcpu *vcpu) 
+{     
+	uint64_t data;     
+	data = 123;     
+	printk("[vmkernel] handling fake rdtsc from cpl %i\n", vmx_get_cpl(vcpu));      
+	vcpu->arch.regs[VCPU_REGS_RAX] = data & -1u;     
+	vcpu->arch.regs[VCPU_REGS_RDX] = (data >> 32) & -1u;          
+	skip_emulated_instruction(vcpu); 
+	return 1; 
+}
+
 /*
  * The exit handlers return 1 if the exit was handled fully and guest execution
  * may resume.  Otherwise they set the kvm_run parameter to indicate what needs
