@@ -1,0 +1,70 @@
+*** ./vmx.c	2021-02-28 10:30:11.257748437 -0500
+--- ./vmx_patched.c	2021-02-28 10:19:41.056761470 -0500
+***************
+*** 5,16 ****
+--- 5,19 ----
+   * This module enables machines with Intel VT-x extensions to run virtual
+   * machines without emulation or binary translation.
+   *
++  * Modified by Big Man James 2021
++  *
+   * Copyright (C) 2006 Qumranet, Inc.
+   * Copyright 2010 Red Hat, Inc. and/or its affiliates.
+   *
+   * Authors:
+   *   Avi Kivity   <avi@qumranet.com>
+   *   Yaniv Kamay  <yaniv@qumranet.com>
++  *   Big Man James <haizywoop@gmail.com>
+   */
+  
+  #include <linux/frame.h>
+***************
+*** 2424,2430 ****
+  	      CPU_BASED_MWAIT_EXITING |
+  	      CPU_BASED_MONITOR_EXITING |
+  	      CPU_BASED_INVLPG_EXITING |
+! 	      CPU_BASED_RDPMC_EXITING;
+  
+  	opt = CPU_BASED_TPR_SHADOW |
+  	      CPU_BASED_USE_MSR_BITMAPS |
+--- 2427,2434 ----
+  	      CPU_BASED_MWAIT_EXITING |
+  	      CPU_BASED_MONITOR_EXITING |
+  	      CPU_BASED_INVLPG_EXITING |
+! 	      CPU_BASED_RDPMC_EXITING |
+! 	      CPU_BASED_RDTSC_EXITING;
+  
+  	opt = CPU_BASED_TPR_SHADOW |
+  	      CPU_BASED_USE_MSR_BITMAPS |
+***************
+*** 5661,5666 ****
+--- 5665,5683 ----
+  	return 1;
+  }
+  
++ // handle_rdtsc method
++ 
++ static int handle_rdtsc(struct kvm_vcpu *vcpu) 
++ {     
++ 	uint64_t data;     
++ 	data = 123;     
++ 	printk("[vmkernel] handling fake rdtsc from cpl %i\n", vmx_get_cpl(vcpu));      
++ 	vcpu->arch.regs[VCPU_REGS_RAX] = data & -1u;     
++ 	vcpu->arch.regs[VCPU_REGS_RDX] = (data >> 32) & -1u;          
++ 	skip_emulated_instruction(vcpu); 
++ 	return 1; 
++ }
++ 
+  /*
+   * The exit handlers return 1 if the exit was handled fully and guest execution
+   * may resume.  Otherwise they set the kvm_run parameter to indicate what needs
+***************
+*** 5717,5722 ****
+--- 5734,5740 ----
+  	[EXIT_REASON_VMFUNC]		      = handle_vmx_instruction,
+  	[EXIT_REASON_PREEMPTION_TIMER]	      = handle_preemption_timer,
+  	[EXIT_REASON_ENCLS]		      = handle_encls,
++ 	[EXIT_REASON_RDTSC]		      = handle_rdtsc,
+  };
+  
+  static const int kvm_vmx_max_exit_handlers =
